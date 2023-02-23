@@ -1,4 +1,4 @@
-from project import fetch_words, find_indexes, validate_name
+from hangman import fetch_words, find_indexes, validate_name
 
 
 def test_fetch_words():
