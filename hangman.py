@@ -37,3 +37,22 @@ def validate_name(name):
         return True
     else:
         return False
+
+
+def printer_bold(object):
+    """Displays bolded messages."""
+
+    # Prints message
+    print("\033[1m" + object + "\033[0m")
+
+
+def printer_reverse(object):
+    """Displays messages in the terminal using reversed motion effect."""
+
+    # Prints the message
+    for step in reversed(range(len(object))):
+        time.sleep(SHORT_TIME)
+        os.system(CLEAR)
+        # Enables the transition effect
+        for line in reversed(range(len(object) - step)):
+            printer_bold(object[line])
