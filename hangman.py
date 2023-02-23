@@ -94,6 +94,84 @@ def boot_console():
             continue
 
 
+def load_hangman(name):
+    """Loads the Hangman game."""
+
+    os.system(CLEAR)
+    time.sleep(LONG_TIME)
+
+    # Prints the welcome screen
+    printer_reverse(hangman_splash)
+
+    # Awaits user input
+    time.sleep(MEDIUM_TIME)
+    print("\n")
+    time.sleep(SHORT_TIME)
+    input("PRESS ENTER TO START GAME... ")
+
+    # Displays options screen with waiting time
+    # "SELECT LENGTH OF WORDS:"
+    # "[1] FOUR TO SEVEN CHARACTERS"
+    # "[2] MORE THAN SEVEN CHARACTERS"
+    time.sleep(MEDIUM_TIME)
+    printer("hangman", "longer", 1)
+
+    while True:
+
+        # Displays options screen with NO waiting time
+        printer("hangman", "shorter", 1)
+
+        # Prompts the user to pick an option
+        length = input("SELECT OPTION AND PRESS ENTER... ").strip()
+
+        # Validates the input
+        try:
+            if int(length) in [1, 2]:
+                length = int(length)
+                break
+        except ValueError:
+            continue
+
+    # Displays options screen with waiting time
+    # "NOUNS OR PROPER NOUNS? UMM, THAT'S NAMES BUT FANCIER"
+    # "[1] FEELING FANCY"
+    # "[2] NOT TODAY"
+    time.sleep(MEDIUM_TIME)
+    printer("hangman", "longer", 2)
+
+    while True:
+
+        # Displays options screen with NO waiting time
+        printer("hangman", "shorter", 2)
+
+        # Prompts the user to pick an option
+        uppercase = input("SELECT OPTION AND PRESS ENTER... ").strip()
+
+        # Validates the input
+        try:
+            if int(uppercase) in [1, 2]:
+                uppercase = int(uppercase)
+                break
+        except ValueError:
+            continue
+
+    # Displays loading screen
+    os.system(CLEAR)
+    time.sleep(SHORT_TIME)
+    printer_bold("HOLD STEADY, FLIPPING THROUGH DICTIONARY PAGE")
+    time.sleep(SHORT_TIME)
+    print("\n")
+
+    # Fetches the list of words
+    words = fetch_words(length, uppercase)
+
+    # Awaits user input
+    input("DONE! PRESS ENTER TO PLAY... ")
+
+    # Executes the game
+    play_hangman(name, words)
+
+
 def save_result(name, word, status):
     """Keeps a journal of each user's guessed word."""
 
