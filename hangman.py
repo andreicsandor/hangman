@@ -1,3 +1,14 @@
+import csv
+import os
+import random
+import requests
+import time
+
+from datetime import datetime
+from extras import hangman_splash, hangman_empty, hangman_progress, messages_winning, messages_losing, messages_loading, text_console, text_hangman
+from random import choice
+
+
 # Variable used to clear terminal
 # Replace with "cls" for Windows OS
 CLEAR = "clear"
