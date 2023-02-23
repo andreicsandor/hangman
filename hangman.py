@@ -30,6 +30,70 @@ def main():
         load_hangman(name)
 
 
+def boot_console():
+    """Boots up the game console and displays games choices."""
+
+    # Clears the terminal console
+    os.system(CLEAR)
+    # Awaits seconds
+    time.sleep(LONG_TIME)
+
+    printer_bold("BOOTING UP...")
+    time.sleep(LONG_TIME)
+
+    attempts = 0
+
+    while True:
+
+        os.system(CLEAR)
+        time.sleep(MEDIUM_TIME)
+
+        # Displays initial greeting message
+        if attempts == 0:
+            printer_bold("HELLO, HUMAN.")
+            print("\n")
+        else:
+            printer_bold("HELLO, HUMAN. YET AGAIN.")
+            print("\n")
+
+        attempts += 1
+
+        time.sleep(LONG_TIME)
+        name = input("TYPE YOUR NAME... ").strip()
+
+        if validate_name(name):
+            name = name.upper()
+            break
+        else:
+            os.system(CLEAR)
+            time.sleep(MEDIUM_TIME)
+            printer_bold("NAME SHOULD BE 4 TO 10 CHARACTERS LONG AND CONSIST OF ALPHANUMERIC CHARACTERS. LET'S TRY AGAIN...")
+            time.sleep(LONG_TIME * 3)
+
+    # Displays loading screen with waiting time
+    # "WELCOME TO CS50 🕹️ STATION"
+    # "WANNA PLAY A GAME?"
+    # "[1] RED PILL"
+    # "[2] BLUE PILL"
+    printer("boot", "longer")
+
+    while True:
+
+        # Displays loading screen with NO waiting time
+        printer("boot", "shorter")
+
+        # Prompts the user to pick a game
+        game = input("SELECT YOUR OPTION AND PRESS ENTER... ").strip()
+
+        # Validates the input
+        try:
+            if int(game) in [1, 2]:
+                # Returns the user's picked game
+                return name, game
+        except ValueError:
+            continue
+
+
 def save_result(name, word, status):
     """Keeps a journal of each user's guessed word."""
 
