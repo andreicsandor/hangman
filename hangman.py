@@ -30,6 +30,77 @@ def main():
         load_hangman(name)
 
 
+def save_result(name, word, status):
+    """Keeps a journal of each user's guessed word."""
+
+    now = datetime.now()
+    date = now.strftime("%d/%m/%Y %H:%M:%S")
+
+    with open("journal.csv", "a") as file:
+        writer = csv.DictWriter(file, fieldnames=["date", "name", "word", "guess"])
+        writer.writerow({"date": date, "name": name, "word": word, "guess": status})
+
+
+def fetch_words(length, uppercase):
+    """Gets the API response and validates the list of words."""
+
+    # Sets the length criteria
+    if length == 1:
+        min_length = 4
+        max_length = 7
+    elif length == 2:
+        min_length = 8
+        max_length = 15
+    # Sets the uppercase criteria
+    if uppercase == 1:
+        option_uppercase = True
+    elif uppercase == 2:
+        option_uppercase = False
+
+    # API Wordnik
+    url = f"https://api.wordnik.com/v4/words.json/randomWords?hasDictionaryDef=true&minCorpusCount=1&minLength={str(min_length)}&maxLength={str(max_length)}&limit={str(LIMIT)}&api_key={KEY}"
+
+    # Gets API response
+    response = requests.get(url)
+    object = response.json()
+
+    # Picks three random words from the sample
+    positions = []
+    words = []
+    for _ in range(ROUNDS):
+        condition_char = 'fail'
+        while condition_char == 'fail':
+            position = random.randint(0, LIMIT-1)
+
+            # Checks whether the position was previously selected
+            while True:
+                if position in positions:
+                    position = random.randint(0, LIMIT-1)
+                else:
+                    break
+
+            # Remembers the randomly selected position
+            positions.append(position)
+
+            # Stores the word
+            word = object[position]["word"]
+
+            # Validates the word
+            if "-" not in word and " " not in word and "." not in word and "'" not in word:
+                condition_uppercase = 'pass'
+                if option_uppercase:
+                    if word[0].islower() == True:
+                        condition_uppercase = 'fail'
+                else:
+                    if word[0].isupper() == True:
+                        condition_uppercase = 'fail'
+                if condition_uppercase == 'pass':
+                    condition_char = 'pass'
+                    words.append(word.upper())
+
+    return words
+
+
 def find_indexes(word, guess):
     """Returns a list of indexes for matched characters in the word."""
     indexes = []
