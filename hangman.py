@@ -567,3 +567,7 @@ def printer_reverse(object):
         # Enables the transition effect
         for line in reversed(range(len(object) - step)):
             printer_bold(object[line])
+
+
+if __name__ == "__main__":
+    main()
