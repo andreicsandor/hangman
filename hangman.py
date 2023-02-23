@@ -283,7 +283,7 @@ def play_hangman(name, words):
                     # Decreases no. of lives
                     lives -= 1
                     hearts = "❤️" * lives
-                    hangman_empty[9] = f"Lives: {hearts}"
+                    hangman_empty[9] = f"LIVES: {hearts}"
 
                     # Displays encouragement message
                     print("\n")
