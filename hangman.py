@@ -30,6 +30,16 @@ def main():
         load_hangman(name)
 
 
+def find_indexes(word, guess):
+    """Returns a list of indexes for matched characters in the word."""
+    indexes = []
+
+    for index, character in enumerate(word):
+        if character == guess:
+            indexes.append(index)
+    return indexes
+
+
 def validate_name(name):
     """Validates the user's name."""
 
@@ -144,7 +154,7 @@ def printer(type, duration, screen=''):
                 print(text_hangman[8])
                 time.sleep(SHORT_TIME)
                 print("\n")
-                
+
 
 def printer_bold(object):
     """Displays bolded messages."""
