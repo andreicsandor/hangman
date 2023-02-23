@@ -172,6 +172,176 @@ def load_hangman(name):
     play_hangman(name, words)
 
 
+def play_hangman(name, words):
+    """Executes the Hangman game."""
+
+    # Iterates through the rounds
+    round = 0
+    while round < ROUNDS:
+        os.system(CLEAR)
+        time.sleep(MEDIUM_TIME)
+
+        # Picks the round's word
+        word = words[round]
+
+        # Sets the no. of lives per round
+        lives = MAX_LIFE
+        hearts = "❤️" * lives
+
+        # Sets the no. of correct guesses needed
+        target = len(word)
+        points = 0
+        guessed = []
+
+        # Prepares the visual elements
+        hangman_empty[10] = f"ROUND: {round+1}"
+        hangman_empty[9] = f"LIVES: {hearts}"
+        hangman_empty[0] = "-" * len(word)
+
+        #################################
+        # print(word) # Testing purposes
+        #################################
+
+        # Prints the empty hangman figurine
+        printer_reverse(hangman_empty)
+
+        # Stops the game when target points are achieved or all lives are lost
+        while lives > 0 and points < target:
+            # Awaits the user's input
+            print("\n")
+            guess = input("TYPE LETTER... ").upper().strip()
+
+            # Checks whether the input has already been introduced
+            if guess in guessed:
+                print("\n")
+                printer_bold("~~ HMM, I'VE SEEN THIS ONE BEFORE... ~~")
+                time.sleep(LONG_TIME * 2)
+
+                # Updates the hangman figurine
+                # Uses static effect
+                os.system(CLEAR)
+                printer_bold(hangman_empty[10])
+                printer_bold(hangman_empty[9])
+                printer_bold(hangman_progress[lives])
+                printer_bold(hangman_empty[0])
+            else:
+                guessed.append(guess)
+
+                # Checks whether the word contains the user's entered letter
+                indexes = find_indexes(word, guess)
+
+                # Handles the case when the player's guess is correct
+                if indexes != []:
+
+                    for index in indexes:
+                        # Replaces "-" with the guessed letter
+                        # Copies the word into a list of characters
+                        characters_list = list(hangman_empty[0])
+                        characters_list[index] = guess
+                        hangman_empty[0] = "".join(characters_list)
+                        points += 1
+
+                    # Displays congratulations message
+                    print("\n")
+                    printer_bold(choice(messages_winning))
+                    time.sleep(LONG_TIME * 2)
+
+                    # Updates the hangman figurine
+                    # Uses static effect
+                    os.system(CLEAR)
+                    printer_bold(hangman_empty[10])
+                    printer_bold(hangman_empty[9])
+                    printer_bold(hangman_progress[lives])
+                    printer_bold(hangman_empty[0])
+
+                    # Handles the case when all letters were correctly guessed
+                    if points == target:
+
+                        # Marks the round as complete
+                        round += 1
+
+                        print("\n")
+                        printer_bold("~~ YOU WON! ~~")
+                        time.sleep(LONG_TIME * 3)
+
+                        # Write result in the journal
+                        save_result(name, word, "PASSED")
+
+                # Handles the case when the player's guess is incorrect
+                else:
+                    # Decreases no. of lives
+                    lives -= 1
+                    hearts = "❤️" * lives
+                    hangman_empty[9] = f"Lives: {hearts}"
+
+                    # Displays encouragement message
+                    print("\n")
+                    printer_bold(choice(messages_losing))
+                    time.sleep(LONG_TIME * 2)
+
+                    # Updates the hangman figurine
+                    # Uses static effect
+                    os.system(CLEAR)
+                    printer_bold(hangman_empty[10])
+                    printer_bold(hangman_empty[9])
+                    printer_bold(hangman_progress[lives])
+                    printer_bold(hangman_empty[0])
+
+                    # Handles the case when no more lives are left
+                    if lives == 0:
+
+                        # Marks the round as complete
+                        round += 1
+
+                        os.system(CLEAR)
+                        printer_bold(hangman_empty[10])
+                        printer_bold(hangman_empty[9])
+                        printer_bold(hangman_progress[0])
+                        printer_bold(word)
+                        print("\n")
+                        printer_bold("~~ YOU LOST! ~~")
+
+                        time.sleep(LONG_TIME * 3)
+
+                        # Write result in the journal
+                        save_result(name, word, "FAILED")
+
+        if round != ROUNDS:
+            os.system(CLEAR)
+            printer_bold(choice(messages_loading))
+            time.sleep(LONG_TIME * 2)
+        else:
+            # "FANCY ANOTHER SET OF ROUNDS?"
+            # "[Y] I'M ALL LOOSEN UP, LET'S GO"
+            # "[n] ENOUGH IS ENOUGH"
+            printer("hangman", "longer", 3)
+
+            while True:
+
+                # Displays options screen with NO waiting time
+                printer("hangman", "shorter", 3)
+                # Prompts the user to pick an option
+                answer = input("SELECT OPTION AND PRESS ENTER... ").strip()
+                # Validates the input
+                try:
+                    if answer.upper() == "Y":
+                        round = 0
+                        break
+                    if answer.upper() == "N":
+                        break
+                except ValueError:
+                    continue
+
+    # Displays game end screen
+    os.system(CLEAR)
+    hangman_splash[0] = "THIS WAS HANGMAN"
+    printer_reverse(hangman_splash)
+    time.sleep(MEDIUM_TIME)
+    print("\n")
+    time.sleep(SHORT_TIME)
+    print("THE END.")
+
+
 def save_result(name, word, status):
     """Keeps a journal of each user's guessed word."""
 
