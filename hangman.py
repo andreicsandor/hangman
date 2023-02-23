@@ -28,3 +28,12 @@ def main():
     # Starts the game
     if game == "1" or game == "2":
         load_hangman(name)
+
+
+def validate_name(name):
+    """Validates the user's name."""
+
+    if 10 >= len(name) >= 4 and name.isalnum():
+        return True
+    else:
+        return False
