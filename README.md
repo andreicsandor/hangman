@@ -2,7 +2,7 @@
 #### Video Demo: https://youtu.be/Rzdr12dDG68
 
 ## Description
-My final project for CS50's Introduction to Programming with Python. This is a tiny Hangman game, which let's you guess words that are scraped using an API. The game stores your results so that you can keep track of your guesses, won and lost rounds.
+My final project for CS50's Introduction to Programming with Python. This is a tiny Hangman game, which lets you guess words that are scraped using an API. The game stores your results so that you can keep track of your guesses, won and lost rounds.
 
 
 ## Contents
